@@ -1,24 +1,17 @@
 # README
-
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
 * System dependencies
+devise
+omniauth
+omniauth-strava
 
 * Configuration
 
 * Database creation
+create role stravaapi with createdb login password 'stravaapi';
+rake db:create
 
 * Database initialization
+rake db:migrate
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* External authorization
+http://localhost:3000/users/auth/strava

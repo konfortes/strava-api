@@ -1,5 +1,5 @@
 class AddStravaTokenToUsers < ActiveRecord::Migration[5.0]
   def change
-    add_column :users, :strava_token, :string
+    add_column :users, :authorization_token, :string
   end
 end

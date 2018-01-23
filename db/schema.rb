@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(version: 20180121195031) do
     t.datetime "updated_at",                          null: false
     t.string   "provider"
     t.string   "uid"
-    t.string   "strava_token"
+    t.string   "authorization_token"
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end

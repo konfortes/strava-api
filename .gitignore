@@ -22,3 +22,8 @@
 
 # Ignore application configuration
 /config/application.yml
+
+.tags
+.tags1
+tags
+/cert

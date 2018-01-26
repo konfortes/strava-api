@@ -30,5 +30,11 @@ module StravaApi
     config.middleware.use ActionDispatch::Flash
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use ActionDispatch::Session::CookieStore
+
+    if Rails.env.test?
+      config.autoload_paths += %w(lib lib/**)
+    else
+      config.eager_load_paths += Dir["#{config.root}/lib/**/"].select { |f| File.directory?(f) }
+    end
   end
 end

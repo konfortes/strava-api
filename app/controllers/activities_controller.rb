@@ -42,6 +42,18 @@ class ActivitiesController < ApplicationController
     render json: efforts
   end
 
+  def auto_generate_description
+    params.require(:id)
+    activity = client.retrieve_an_activity(params[:id])
+    render :not_found and return unless activity
+    activity = Activity.new(activity)
+    description = LapsDescriber.new(activity).describe
+    # client.update_an_activity(activity.id.to_sym, description: description)
+    # client.update_an_activity(activity.id, description: description)
+    puts description
+    head :ok
+  end
+
   private
 
     def list_athlete_activities(date, options = {})

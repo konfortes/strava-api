@@ -1,6 +1,6 @@
 class BaseActivitySerializer < ActiveModel::Serializer
   CONVERSION_RATIO = 3.6
-  attributes :id, :name, :distance, :moving_time, :elapsed_time, :type, :start_date_local, :kudos_count,
+  attributes :id, :name, :description ,:distance, :moving_time, :elapsed_time, :type, :start_date_local, :kudos_count,
     :average_speed, :average_pace
 
   def elapsed_time
@@ -16,7 +16,7 @@ class BaseActivitySerializer < ActiveModel::Serializer
   end
 
   def average_speed
-    "#{(object.average_speed * CONVERSION_RATIO).round(1)} km/h" 
+    "#{(object.average_speed * CONVERSION_RATIO).round(1)} km/h"
   end
 
   def average_pace

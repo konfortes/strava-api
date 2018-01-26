@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   resources :activities do
     collection do
       get 'israman_splits'
+      get 'israman_efforts'
     end
   end
 

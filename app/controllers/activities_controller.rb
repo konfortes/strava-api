@@ -46,11 +46,12 @@ class ActivitiesController < ApplicationController
     params.require(:id)
     activity = client.retrieve_an_activity(params[:id])
     render :not_found and return unless activity
+    
     activity = Activity.new(activity)
-    description = LapsDescriber.new(activity).describe
-    # client.update_an_activity(activity.id.to_sym, description: description)
-    # client.update_an_activity(activity.id, description: description)
-    puts description
+    description = LapsDescriptor.new(activity).describe
+
+    client.update_an_activity(activity.id, description: description)
+
     head :ok
   end
 

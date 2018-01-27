@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     collection do
       get 'israman_splits'
       get 'israman_efforts'
+      get 'israman_preparation'
     end
   end
 

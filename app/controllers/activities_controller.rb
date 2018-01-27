@@ -44,7 +44,7 @@ class ActivitiesController < ApplicationController
 
   def israman_preparation
     preparation = {}
-    preparation_period = (params[:preparation_period] || 4).months
+    preparation_period = (params[:preparation_period] || 4).to_i.months
     ISRAMAN_DATES.each do |year, date|
       activities = list_athlete_activities(before: date.to_i, after: (date - preparation_period).to_i, sanitize: true)
       next unless activities.present?

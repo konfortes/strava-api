@@ -1,6 +1,4 @@
 class LapsDescriptor
-  CONVERSION_RATIO = 3.6
-
   attr_accessor :laps
 
   def initialize(activity)
@@ -50,24 +48,23 @@ class LapsDescriptor
 
     def laps_paces(laps)
       laps.map do |lap|
-        secs_per_km = 1000 / lap.average_speed
-        "#{Time.at(secs_per_km).utc.strftime("%M:%S")}"
-       end
+        UnitsConverter.meters_per_second_to_pace_per_km(lap.average_speed)
+      end
     end
 
     def laps_unit(laps)
       if distance_based?(laps)
-        "#{(laps.second.distance / 1000).round(1)}km"
+        "#{UnitsConverter.meters_to_kms(laps.second.distance)}km"
       else # time based
-        Time.at(laps.second.elapsed_time).utc.strftime("%M:%S")
+        UnitsConverter.seconds_to_humanized_time(laps.second.moving_time)
       end
     end
 
     def distance_based?(laps)
       uniqe_distances = laps.map(&:distance).uniq
-      uniqe_elapsed_times = laps.map(&:elapsed_time).uniq
+      uniqe_moving_times = laps.map(&:moving_time).uniq
 
-      uniqe_distances.count == 1 || uniqe_distances.count < uniqe_elapsed_times.count
+      uniqe_distances.count == 1 || uniqe_distances.count < uniqe_moving_times.count
     end
 
     def wu_lap
@@ -79,6 +76,6 @@ class LapsDescriptor
     end
 
     def sanitize!
-      laps.reject! { |lap| lap.elapsed_time < 20 }
+      laps.reject! { |lap| lap.moving_time < 20 }
     end
 end

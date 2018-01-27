@@ -2,8 +2,8 @@ class PreparationAnalyzer
   attr_accessor :swims, :rides, :runs
 
   def initialize(activities)
-    @swims, other = activities.partition { |activity| activity.type == 'Swim' }
-    @rides, @runs = other.partition { |activity| activity.type == 'Ride'}
+    @swims, other = activities.partition { |activity| activity.type == ACTIVITY::TYPE::SWIM }
+    @rides, @runs = other.partition { |activity| activity.type == ACTIVITY::TYPE::RIDE }
   end
 
   def analyze
@@ -18,27 +18,27 @@ class PreparationAnalyzer
   def analyze_swims
     distances = swims.map(&:distance)
     {
-      total_distance: distances.sum / 1000,
-      longest_swim: distances.max.to_i / 1000,
-      total_time: Time.at(swims.map(&:elapsed_time).sum).utc.strftime("%H:%M:%S")
+      total_distance: UnitsConverter.meters_to_kms(distances.sum),
+      longest_swim: UnitsConverter.meters_to_kms(distances.max || 0),
+      total_time: UnitsConverter.seconds_to_humanized_time(swims.map(&:elapsed_time).sum)
     }
   end
 
   def analyze_rides
     distances = rides.map(&:distance)
     {
-      total_distance: distances.sum / 1000,
-      longest_ride: distances.max.to_i / 1000,
-      total_time: Time.at(rides.map(&:elapsed_time).sum).utc.strftime("%H:%M:%S")
+      total_distance: UnitsConverter.meters_to_kms(distances.sum),
+      longest_ride: UnitsConverter.meters_to_kms(distances.max.to_i),
+      total_time: UnitsConverter.seconds_to_humanized_time(rides.map(&:elapsed_time).sum)
     }
   end
 
   def analyze_runs
     distances = runs.map(&:distance)
     {
-      total_distance: distances.sum / 1000,
-      longest_run: distances.max.to_i / 1000,
-      total_time: Time.at(runs.map(&:elapsed_time).sum).utc.strftime("%H:%M:%S")
+      total_distance: UnitsConverter.meters_to_kms(distances.sum),
+      longest_run: UnitsConverter.meters_to_kms(distances.max.to_i),
+      total_time: UnitsConverter.seconds_to_humanized_time(runs.map(&:elapsed_time).sum)
     }
   end
 

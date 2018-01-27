@@ -1,35 +1,31 @@
 class BaseActivitySerializer < ActiveModel::Serializer
-  CONVERSION_RATIO = 3.6
   attributes :id, :name, :description ,:distance, :moving_time, :elapsed_time, :type, :start_date_local, :kudos_count,
     :average_speed, :average_pace
 
   def elapsed_time
-    Time.at(object.elapsed_time).utc.strftime("%H:%M:%S")
+    UnitsConverter.seconds_to_humanized_time(object.elapsed_time)
   end
 
   def moving_time
-    Time.at(object.moving_time).utc.strftime("%H:%M:%S")
+    UnitsConverter.seconds_to_humanized_time(object.moving_time)
   end
 
   def distance
-    (object.distance.to_i / 1000).round(2)
+    UnitsConverter.meters_to_kms(object.distance)
   end
 
   def average_speed
-    "#{(object.average_speed * CONVERSION_RATIO).round(1)} km/h"
+    UnitsConverter.meters_per_second_to_kmh(object.average_speed)
   end
 
   def average_pace
-    return if object.type == 'Bike'
-    return if object.average_speed.zero?
+    return if object.average_speed.blank? || object.average_speed.zero?
 
-    if object.type == 'Run'
-      secs_per_km = 1000 / object.average_speed
-      "#{Time.at(secs_per_km).utc.strftime("%M:%S")}/km"
-    elsif object.type == 'Swim'
-      # TODO: fix inaccuracy
-      secs_per_100m = object.average_speed * 100
-      "#{Time.at(secs_per_100m).utc.strftime("%M:%S")}/100m"
+
+    if object.type == ACTIVITY::TYPE::SWIM
+      UnitsConverter.meters_per_second_to_pace_per_100m(object.average_speed)
+    else
+      UnitsConverter.meters_per_second_to_pace_per_km(object.average_speed)
     end
   end
 end

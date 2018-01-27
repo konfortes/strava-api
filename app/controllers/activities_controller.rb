@@ -67,8 +67,18 @@ class ActivitiesController < ApplicationController
     head :ok
   end
 
-  private
+  def most_kudosed
+    year = params[:year] || DateTime.now.year
+    beginning_of_year = DateTime.parse("01-01-#{year}")
+    range = {before: (DateTime.now + 1.days).to_i, after: (beginning_of_year - 1.days).to_i }
 
+    activities = list_athlete_activities(range)
+    activity = activities.max { |a1, a2| a1.kudos_count <=> a2.kudos_count }
+
+    render json: BaseActivitySerializer.new(activity)
+  end
+
+  private
     def list_athlete_activities(options = {})
       range = options.has_key?(:date) ? day_range(options[:date]) : options.slice(:before, :after)
 

@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       get 'israman_splits'
       get 'israman_efforts'
       get 'israman_preparation'
+      get 'most_kudosed'
     end
   end
 

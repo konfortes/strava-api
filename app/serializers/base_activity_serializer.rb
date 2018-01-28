@@ -1,5 +1,5 @@
 class BaseActivitySerializer < ActiveModel::Serializer
-  attributes :id, :name, :description ,:distance, :moving_time, :elapsed_time, :type, :start_date_local, :kudos_count,
+  attributes :id, :name ,:distance, :moving_time, :elapsed_time, :type, :start_date_local, :kudos_count,
     :average_speed, :average_pace
 
   def elapsed_time
@@ -20,7 +20,6 @@ class BaseActivitySerializer < ActiveModel::Serializer
 
   def average_pace
     return if object.average_speed.blank? || object.average_speed.zero?
-
 
     if object.type == Activity::Type::SWIM
       UnitsConverter.meters_per_second_to_pace_per_100m(object.average_speed)

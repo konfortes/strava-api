@@ -1,5 +1,5 @@
 class ActivitySerializer < BaseActivitySerializer
-  attributes :laps
+  attributes :laps, :description
 
   def laps
     laps = object.laps.map { |lap| Lap.new(lap) }

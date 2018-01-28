@@ -15,7 +15,6 @@ class ActivitiesController < ApplicationController
   def index
     range = params.permit(:before, :after).reverse_merge(after: 7.days.ago.to_i, before: 1.days.from_now.to_i)
     activities = list_athlete_activities(range)
-    activities.map! { |activity| Activity.new(activity) }
 
     render json: ActiveModel::ArraySerializer.new(activities, each_serializer: BaseActivitySerializer)
   end
@@ -62,7 +61,6 @@ class ActivitiesController < ApplicationController
 
     activity = Activity.new(activity)
     description = LapsDescriptor.new(activity).describe
-
     client.update_an_activity(activity.id, description: description) if description
 
     head :ok

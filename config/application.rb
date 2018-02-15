@@ -36,5 +36,10 @@ module StravaApi
     else
       config.eager_load_paths += Dir["#{config.root}/lib/**/"].select { |f| File.directory?(f) }
     end
+
+    logger = ActiveSupport::Logger.new(STDOUT)
+    logger.formatter = config.log_formatter
+    config.log_tags = [:subdomain, :uuid]
+    config.logger = ActiveSupport::TaggedLogging.new(logger)
   end
 end

@@ -1,16 +1,21 @@
 Rails.application.routes.draw do
   root 'activities#index'
   devise_for :users, :controllers => { :omniauth_callbacks => "callbacks" }
-  resources :activities do
+  resources :activities, only: [:index, :show] do
     member do
       post 'auto_generate_description'
     end
 
     collection do
-      get 'israman_splits'
-      get 'israman_efforts'
-      get 'israman_preparation'
       get 'most_kudosed'
+    end
+  end
+
+  resources :races, only: [:index] do
+    member do
+      get 'splits'
+      get 'efforts'
+      get 'preparation'
     end
   end
 

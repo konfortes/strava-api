@@ -2,8 +2,8 @@ class PreparationAnalyzer
   attr_accessor :swims, :rides, :runs
 
   def initialize(activities)
-    @swims, other = activities.partition { |activity| activity.type == ACTIVITY::TYPE::SWIM }
-    @rides, @runs = other.partition { |activity| activity.type == ACTIVITY::TYPE::RIDE }
+    @swims, other = activities.partition { |activity| activity.type == Activity::Type::SWIM }
+    @rides, @runs = other.partition { |activity| activity.type == Activity::Type::RIDE }
   end
 
   def analyze

@@ -41,5 +41,9 @@ module StravaApi
     logger.formatter = config.log_formatter
     config.log_tags = [:subdomain, :uuid]
     config.logger = ActiveSupport::TaggedLogging.new(logger)
+
+    # setting cache_store in here will be overriden by env.rb
+    # REDIS_CONFIG = YAML.load(File.open( Rails.root.join("config/redis.yml") ) ).deep_symbolize_keys[Rails.env.to_sym]
+    # config.cache_store = :redis_store, REDIS_CONFIG
   end
 end

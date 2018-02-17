@@ -6,7 +6,7 @@
 #
 default: &default
   adapter: postgresql
-  host: postgres
+  host: <%= ENV['DB_HOST'] %>
   pool: 5
   timeout: 5000
   user: stravaapi

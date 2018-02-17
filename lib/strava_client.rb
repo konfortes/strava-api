@@ -28,9 +28,15 @@ class StravaClient
     client.update_an_activity(activity.id, params)
   end
 
-  def retrieve_athlete(id=nil)
-    fetch("athlete:#{id.to_i}", ttl: 900) do
-      id ? client.retrieve_another_athlete(id) : client.retrieve_current_athlete
+  def retrieve_current_athlete(current_user_id)
+    fetch("athlete:current:#{current_user_id}", ttl: 1800) do
+      client.retrieve_current_athlete
+    end
+  end
+
+  def retrieve_athlete(id)
+    fetch("athlete:#{id}", ttl: 900) do
+      client.retrieve_another_athlete(id)
     end
   end
 
@@ -56,5 +62,4 @@ class StravaClient
       end
       value
     end
-
 end

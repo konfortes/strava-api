@@ -34,10 +34,4 @@ class ActivitiesController < ApplicationController
 
     render json: BaseActivitySerializer.new(activity)
   end
-
-  private
-
-    def strava_client
-      @strava_client ||= StravaClient.new(access_token: current_user.authorization_token)
-    end
 end

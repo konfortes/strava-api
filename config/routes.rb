@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root 'activities#index'
+  root 'athletes#index'
   devise_for :users, :controllers => { :omniauth_callbacks => "callbacks" }
   resources :activities, only: [:index, :show] do
     member do
@@ -18,6 +18,8 @@ Rails.application.routes.draw do
       get 'preparation'
     end
   end
+
+  resources :athletes, only: [:show, :index]
 
   namespace :auth do
     get 'exchange', to: 'auth#exchange'

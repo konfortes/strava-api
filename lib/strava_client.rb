@@ -12,7 +12,7 @@ class StravaClient
     end
   end
 
-  def list_athlete_activities(options = {})
+  def list_athlete_activities(options={})
     # TODO: normalize options(ranges) to the beginning of day so it will be able to cache
     fetch("list_athlete_activities:#{options.to_s}") do
       range = options.has_key?(:date) ? day_range(options[:date]) : options.slice(:before, :after)
@@ -24,8 +24,14 @@ class StravaClient
     end
   end
 
-  def update_an_activity(id, params)
+  def update_an_activity(id)
     client.update_an_activity(activity.id, params)
+  end
+
+  def retrieve_athlete(id=nil)
+    fetch("athlete:#{id.to_i}", ttl: 900) do
+      id ? client.retrieve_another_athlete(id) : client.retrieve_current_athlete
+    end
   end
 
   private

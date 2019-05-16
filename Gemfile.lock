@@ -193,7 +193,7 @@ DEPENDENCIES
   devise
   figaro
   listen (~> 3.0.5)
-  omniauth
+  omniauth-oauth2
   omniauth-strava
   pg
   puma (~> 3.0)
@@ -206,4 +206,4 @@ DEPENDENCIES
   tzinfo-data
 
 BUNDLED WITH
-   1.16.0
+   1.17.3

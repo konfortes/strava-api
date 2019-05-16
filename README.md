@@ -20,7 +20,9 @@ rake db:migrate
 ```
 
 ### External authorization
-[http://localhost:3000/users/auth/strava](http://localhost:3000/users/auth/strava)
+[http://localhost:3000/users/auth/strava](http://localhost:3000/users/auth/strava)  
+make sure `STRAVA_CLIENT_ID` and `STRAVA_API_KEY` are being set in env (.env for docker)
+
 
 ## Docker
 ```bash

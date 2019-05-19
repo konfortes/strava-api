@@ -6,9 +6,9 @@ class StravaClient
     @client = Strava::Api::V3::Client.new(access_token: access_token)
   end
 
-  def retrieve_an_activity(id)
+  def retrieve_activity(id)
     fetch("activity:#{id}", ttl: 900) do
-      client.retrieve_an_activity(id)
+      client.retrieve_activity(id)
     end
   end
 
@@ -24,8 +24,8 @@ class StravaClient
     end
   end
 
-  def update_an_activity(id)
-    client.update_an_activity(activity.id, params)
+  def update_activity(id)
+    client.update_activity(activity.id, params)
   end
 
   def retrieve_current_athlete(current_user_id)
@@ -41,25 +41,25 @@ class StravaClient
   end
 
   private
-    def day_range(date)
-      { before: date.to_i + 1.days, after: date.to_i - 1.days }
-    end
+  def day_range(date)
+    { before: date.to_i + 1.days, after: date.to_i - 1.days }
+  end
 
-    def sanitize_activities!(activities, duration_threshold)
-      activities.select { |activity| activity['elapsed_time'] > duration_threshold.minutes }
-    end
+  def sanitize_activities!(activities, duration_threshold)
+    activities.select { |activity| activity['elapsed_time'] > duration_threshold.minutes }
+  end
 
-    def fetch(key, options={})
-      value = $redis.get(key)
-      value = JSON(value) if value
+  def fetch(key, options={})
+    value = $redis.get(key)
+    value = JSON(value) if value
 
-      unless value
-        value = yield
-        $redis.pipelined do
-          $redis.set(key, value.to_json) if value.present?
-          $redis.expire(key, options[:ttl] || 600)
-        end
+    unless value
+      value = yield
+      $redis.pipelined do
+        $redis.set(key, value.to_json) if value.present?
+        $redis.expire(key, options[:ttl] || 600)
       end
-      value
     end
+    value
+  end
 end

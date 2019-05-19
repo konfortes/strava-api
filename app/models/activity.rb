@@ -1,23 +1,23 @@
-class Activity < OpenStruct
-  include ActiveModel::SerializerSupport
-
+class Activity < ActiveRecord::Base
   class Type
-    SWIM = 'Swim'
-    RIDE = 'Ride'
-    RUN = 'Run'
+    SWIM = 'Swim'.freeze
+    RIDE = 'Ride'.freeze
+    RUN = 'Run'.freeze
   end
 
-  def self.find(client, id)
-    activity = client.retrieve_an_activity(id)
-    new(activity)
-  end
+  scope :within_date_range, ->(from, to) { where(start_date: from..to) }
 
-  def self.within_date_range(client, options = {})
-    activities = client.list_athlete_activities(options)
-    activities.map { |activity| new(activity) }
-  end
+  # def self.find(client, id)
+  #   activity = client.retrieve_activity(id)
+  #   new(activity)
+  # end
 
-  def self.update(client, id, params)
-    client.update_an_activity(activity.id, params)
-  end
+  # def self.within_date_range(client, options = {})
+  #   activities = client.list_athlete_activities(options)
+  #   activities.map { |activity| new(activity) }
+  # end
+
+  # def self.update(client, id, params)
+  #   client.update_activity(activity.id, params)
+  # end
 end

@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
   root 'athletes#index'
-  devise_for :users, :controllers => { :omniauth_callbacks => "callbacks" }
-  resources :activities, only: [:index, :show] do
+  devise_for :users, controllers: { omniauth_callbacks: 'callbacks' }
+
+  resources :activities, only: %I[index show] do
     member do
       post 'auto_generate_description'
     end
@@ -19,9 +20,5 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :athletes, only: [:show, :index]
-
-  namespace :auth do
-    get 'exchange', to: 'auth#exchange'
-  end
+  resources :athletes, only: %I[show index]
 end

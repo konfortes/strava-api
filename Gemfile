@@ -5,29 +5,28 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-
-gem 'rails', '~> 5.0.4'
+gem 'active_model_serializers', '~>0.9.4'
 gem 'pg'
 gem 'puma', '~> 3.0'
-
-gem 'devise'
-# gem 'omniauth'
-gem 'omniauth-oauth2'
-gem 'omniauth-strava'
-gem 'figaro'
-gem 'strava-api-v3'
-gem 'active_model_serializers', '~>0.9.4'
+gem 'rails', '~> 5.0.4'
 gem 'redis'
 gem 'redis-rails'
 
+gem 'devise'
+gem 'omniauth-oauth2'
+gem 'omniauth-strava'
+gem 'strava-api-v3'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platform: :mri
+  gem 'dotenv-rails'
+  gem 'pry-byebug', platform: :mri
 end
 
 group :development do
+  gem 'better_errors'
+  gem 'binding_of_caller'
   gem 'listen', '~> 3.0.5'
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
 end

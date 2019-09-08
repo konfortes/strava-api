@@ -8,7 +8,7 @@ class StravaClient
 
   def retrieve_activity(id)
     fetch("activity:#{id}", ttl: 900) do
-      client.retrieve_activity(id)
+      client.retrieve_an_activity(id)
     end
   end
 

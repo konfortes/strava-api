@@ -6,7 +6,7 @@
 #
 default: &default
   adapter: postgresql
-  host: <%= ENV['DB_HOST'] %>
+  host: <%= ENV.fetch('DB_HOST', 'localhost') %>
   pool: 5
   timeout: 5000
   user: stravaapi

@@ -23,8 +23,5 @@
 # Ignore application configuration
 /config/application.yml
 
-
-.tags
-.tags1
-tags
-/node_modules
+postgres/
+.env

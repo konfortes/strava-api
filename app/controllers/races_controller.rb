@@ -33,14 +33,15 @@ class RacesController < ApplicationController
     occurances.each do |year, date|
       activities = Activity.within_date_range(strava_client, before: date.to_time.to_i, after: (date.to_time - preparation_period).to_i, sanitize: true)
       next unless activities.present?
+
       preparation[year] = PreparationAnalyzer.new(activities).analyze
     end
 
     render json: preparation
   end
 
-  private
-    def strava_client
-      @strava_client ||= StravaClient.new(access_token: current_user.authorization_token)
-    end
+private
+  def strava_client
+    @strava_client ||= StravaClient.new(access_token: current_user.authorization_token)
+  end
 end

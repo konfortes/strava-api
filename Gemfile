@@ -15,6 +15,7 @@ gem 'redis-rails'
 gem 'devise'
 gem 'omniauth-oauth2'
 gem 'omniauth-strava'
+# TODO: deprecated. change to strava-ruby-client
 gem 'strava-api-v3'
 
 group :development, :test do

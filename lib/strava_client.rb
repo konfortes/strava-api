@@ -1,5 +1,4 @@
 class StravaClient
-
   attr_accessor :client
 
   def initialize(access_token:)
@@ -12,12 +11,12 @@ class StravaClient
     end
   end
 
-  def list_athlete_activities(options={})
+  def list_athlete_activities(options = {})
     # TODO: normalize options(ranges) to the beginning of day so it will be able to cache
-    fetch("list_athlete_activities:#{options.to_s}") do
-      range = options.has_key?(:date) ? day_range(options[:date]) : options.slice(:before, :after)
+    fetch("list_athlete_activities:#{options}") do
+      options.merge(day_range(options[:date])) if options.key?(:date)
 
-      activities = client.list_athlete_activities(range)
+      activities = client.list_athlete_activities(options)
 
       activities = sanitize_activities!(activities, options[:sanitize_threshold]) if options[:sanitize_threshold]
       activities
@@ -25,7 +24,7 @@ class StravaClient
   end
 
   def update_activity(id)
-    client.update_activity(activity.id, params)
+    client.update_activity(id, params)
   end
 
   def retrieve_current_athlete(current_user_id)
@@ -55,6 +54,7 @@ class StravaClient
 
     unless value
       value = yield
+      # TODO: why not setex
       $redis.pipelined do
         $redis.set(key, value.to_json) if value.present?
         $redis.expire(key, options[:ttl] || 600)

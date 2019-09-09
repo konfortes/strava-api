@@ -5,7 +5,7 @@ class CreateRaces < ActiveRecord::Migration[5.0]
       t.string :kind, null: false
       t.string :picture
 
-      t.timestamps
+      t.timestamps null: false
     end
   end
 end

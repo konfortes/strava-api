@@ -6,9 +6,7 @@ class ApplicationController < ActionController::API
   end
 
   def ensure_authorization_token!
-    unless current_user && current_user.authorization_token
-      raise 'missing authorization token'
-    end
+    raise 'missing authorization token' unless current_user&.authorization_token
   end
 
   def strava_client

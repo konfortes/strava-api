@@ -3,20 +3,21 @@ class ActivitiesController < ApplicationController
 
   def index
     range = params.permit(:before, :after).reverse_merge(after: 7.days.ago.to_i, before: 1.days.from_now.to_i)
-    activities = Activity.within_date_range(strava_client, range)
+    activities = Strava::Activity.within_date_range(strava_client, range)
 
     render json: ActiveModel::ArraySerializer.new(activities, each_serializer: BaseActivitySerializer)
   end
 
   def show
     activity = Activity.find(strava_client, params[:id])
+    
     render json: ActivitySerializer.new(activity)
   end
 
   def auto_generate_description
     require_params(:id)
     activity = Activity.find(strava_client, params[:id])
-    render :not_found and return unless activity
+    render :not_found && return unless activity
 
     description = LapsDescriptor.new(activity).describe
     Activity.update(strava_client, params[:id], description: description) if description

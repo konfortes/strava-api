@@ -10,10 +10,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180216025328) do
+ActiveRecord::Schema.define(version: 20190908193651) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "activities", force: :cascade do |t|
+    t.string   "external_id"
+    t.integer  "user_id"
+    t.string   "activity_type"
+    t.string   "name"
+    t.string   "description"
+    t.string   "start_date"
+    t.float    "distance"
+    t.float    "average_speed"
+    t.integer  "moving_time"
+    t.integer  "elapsed_time"
+    t.float    "average_heartrate"
+    t.integer  "kudos_count"
+    t.jsonb    "start_latlng"
+    t.jsonb    "end_latlng"
+    t.boolean  "commute"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.index ["external_id"], name: "index_activities_on_external_id", unique: true, using: :btree
+  end
 
   create_table "race_events", force: :cascade do |t|
     t.integer  "race_id"
@@ -53,5 +74,6 @@ ActiveRecord::Schema.define(version: 20180216025328) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
 
+  add_foreign_key "activities", "users"
   add_foreign_key "race_events", "races"
 end

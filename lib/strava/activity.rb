@@ -20,8 +20,8 @@ module Strava
       activities.map { |activity| new(activity) }
     end
 
-    # def self.update(client, id, params)
-    #   client.update_activity(activity.id, params)
-    # end
+    def self.update(client, activity_id, params)
+      client.update_activity(activity_id, params)
+    end
   end
 end

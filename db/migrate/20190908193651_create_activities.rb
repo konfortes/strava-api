@@ -1,8 +1,8 @@
 class CreateActivities < ActiveRecord::Migration[5.0]
   def change
     create_table :activities do |t|
-      t.string :external_id
-      t.integer :user_id
+      t.string  :external_id
+      t.string  :athlete_id
       t.string  :activity_type
       t.string  :name
       t.string  :description
@@ -20,7 +20,8 @@ class CreateActivities < ActiveRecord::Migration[5.0]
       t.timestamps null: false
     end
 
-    add_foreign_key :activities, :users
+    add_foreign_key :activities, :users, column: :athlete_id, primary_key: :uid
+    # add_foreign_key :activities, :users
     add_index :activities, :external_id, unique: true
   end
 end

@@ -1,4 +1,4 @@
-class LapsDescriptor
+class LapsDescriber
   attr_accessor :laps
 
   def initialize(activity)
@@ -7,9 +7,9 @@ class LapsDescriptor
   end
 
   def describe
-    raise 'unsupported workout' unless classic_pattern?
+    return '' unless classic_pattern?
 
-    wu_cd_description.insert(1, main_laps_description).join(' + ')
+    wu_cd_description.insert(1, main_laps_description).join("\n")
   end
 
   private
@@ -33,17 +33,13 @@ class LapsDescriptor
   end
 
   def interval_laps
-    @interval_laps ||= begin
-      interval_laps, _ = main_laps.partition { |lap| lap.lap_index.even? }
-      interval_laps
-    end
+    interval_laps, = main_laps.partition { |lap| lap.lap_index.even? }
+    interval_laps
   end
 
   def recovery_laps
-    @recovery_laps ||= begin
-      _, recovery_laps = main_laps.partition { |lap| lap.lap_index.even? }
-      recovery_laps
-    end
+    _, recovery_laps = main_laps.partition { |lap| lap.lap_index.even? }
+    recovery_laps
   end
 
   def laps_paces(laps)

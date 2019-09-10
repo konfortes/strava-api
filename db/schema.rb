@@ -17,7 +17,7 @@ ActiveRecord::Schema.define(version: 20190908193651) do
 
   create_table "activities", force: :cascade do |t|
     t.string   "external_id"
-    t.integer  "user_id"
+    t.string   "athlete_id"
     t.string   "activity_type"
     t.string   "name"
     t.string   "description"
@@ -72,8 +72,9 @@ ActiveRecord::Schema.define(version: 20190908193651) do
     t.string   "authorization_token"
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+    t.index ["uid"], name: "index_users_on_uid", unique: true, using: :btree
   end
 
-  add_foreign_key "activities", "users"
+  add_foreign_key "activities", "users", column: "athlete_id", primary_key: "uid"
   add_foreign_key "race_events", "races"
 end

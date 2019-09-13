@@ -9,18 +9,18 @@ class ActivitiesController < ApplicationController
   end
 
   def show
-    activity = Activity.find(strava_client, params[:id])
-    
+    activity = Strava::Activity.find(strava_client, params[:id])
+
     render json: ActivitySerializer.new(activity)
   end
 
   def auto_generate_description
     require_params(:id)
-    activity = Activity.find(strava_client, params[:id])
+    activity = Strava::Activity.find(strava_client, params[:id])
     render :not_found && return unless activity
 
     description = LapsDescriptor.new(activity).describe
-    Activity.update(strava_client, params[:id], description: description) if description
+    Strava::Activity.update(strava_client, params[:id], description: description) if description
 
     head :ok
   end
@@ -30,7 +30,7 @@ class ActivitiesController < ApplicationController
     beginning_of_year = DateTime.parse("01-01-#{year}")
     range = { before: (DateTime.now + 1.days).to_i, after: (beginning_of_year - 1.days).to_i }
 
-    activities = Activity.within_date_range(strava_client, range)
+    activities = Strava::Activity.within_date_range(strava_client, range)
     activity = activities.max { |a1, a2| a1.kudos_count <=> a2.kudos_count }
 
     render json: BaseActivitySerializer.new(activity)

@@ -21,4 +21,7 @@ Rails.application.routes.draw do
   end
 
   resources :athletes, only: %I[show index]
+
+  post '/webhooks', to: 'webhooks#hook'
+  get '/webhooks', to: 'webhooks#verify'
 end

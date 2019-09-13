@@ -39,9 +39,4 @@ class RacesController < ApplicationController
 
     render json: preparation
   end
-
-private
-  def strava_client
-    @strava_client ||= StravaClient.new(access_token: current_user.authorization_token)
-  end
 end

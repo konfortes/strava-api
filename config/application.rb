@@ -1,16 +1,16 @@
 require_relative 'boot'
 
-require "rails"
+require 'rails'
 # Pick the frameworks you want:
-require "active_model/railtie"
-require "active_job/railtie"
-require "active_record/railtie"
-require "action_controller/railtie"
-require "action_mailer/railtie"
-require "action_view/railtie"
-require "action_cable/engine"
+require 'active_model/railtie'
+require 'active_job/railtie'
+require 'active_record/railtie'
+require 'action_controller/railtie'
+require 'action_mailer/railtie'
+require 'action_view/railtie'
+require 'action_cable/engine'
 # require "sprockets/railtie"
-require "rails/test_unit/railtie"
+require 'rails/test_unit/railtie'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -32,14 +32,14 @@ module StravaApi
     config.middleware.use ActionDispatch::Session::CookieStore
 
     if Rails.env.test?
-      config.autoload_paths += %w(lib lib/**)
+      config.autoload_paths += %w[lib lib/**]
     else
       config.eager_load_paths += Dir["#{config.root}/lib/**/"].select { |f| File.directory?(f) }
     end
 
     logger = ActiveSupport::Logger.new(STDOUT)
     logger.formatter = config.log_formatter
-    config.log_tags = [:subdomain, :uuid]
+    config.log_tags = %i[subdomain uuid]
     config.logger = ActiveSupport::TaggedLogging.new(logger)
 
     # setting cache_store in here will be overriden by env.rb

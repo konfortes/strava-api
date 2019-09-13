@@ -1,6 +1,6 @@
 class BaseActivitySerializer < ActiveModel::Serializer
-  attributes :id, :name ,:distance, :moving_time, :elapsed_time, :type, :start_date_local, :kudos_count,
-    :average_speed, :average_pace
+  attributes :id, :name, :distance, :moving_time, :elapsed_time, :type, :start_date_local, :kudos_count,
+             :average_speed, :average_pace
 
   def elapsed_time
     UnitsConverter.seconds_to_humanized_time(object.elapsed_time)

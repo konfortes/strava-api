@@ -2,7 +2,7 @@ class Activity < ActiveRecord::Base
   belongs_to :user, foreign_key: :athlete_id, primary_key: :uid
 
   def self.from_strava_activity(activity)
-    self.new(
+    new(
       external_id: activity.id,
       athlete_id: activity.athlete['id'],
       activity_type: activity.type,

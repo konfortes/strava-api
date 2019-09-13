@@ -13,10 +13,11 @@ class LapsDescriber
   end
 
   private
+
   def classic_pattern?
     interval_laps.count == recovery_laps.count &&
-    interval_laps.map(&:average_speed).min > recovery_laps.map(&:average_speed).max &&
-    interval_laps.count >= 3
+      interval_laps.map(&:average_speed).min > recovery_laps.map(&:average_speed).max &&
+      interval_laps.count >= 3
   end
 
   def wu_cd_description

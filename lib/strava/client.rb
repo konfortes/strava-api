@@ -42,6 +42,7 @@ module Strava
     end
 
     private
+
     def day_range(date)
       { before: date.to_i + 1.days, after: date.to_i - 1.days }
     end

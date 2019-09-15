@@ -9,8 +9,8 @@ default: &default
   host: <%= ENV.fetch('DB_HOST', 'localhost') %>
   pool: 5
   timeout: 5000
-  user: <%= ENV.fetch('DB_USER', 'straavapi') %>
-  password: <%= ENV.fetch('DB_PASSWORD', 'straavapi') %>
+  user: <%= ENV.fetch('DB_USER', 'stravaapi') %>
+  password: <%= ENV.fetch('DB_PASSWORD', 'stravaapi') %>
 
 development:
   <<: *default
@@ -22,4 +22,4 @@ test:
 
 production:
   <<: *default
-  database: <%= ENV.fetch('DB_NAME', 'straavapi') %>
+  database: <%= ENV.fetch('DB_NAME', 'stravaapi') %>

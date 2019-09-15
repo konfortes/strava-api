@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class WebhooksController < ActionController::API
   # before_action :authorize_request!
 

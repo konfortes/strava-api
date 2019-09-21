@@ -30,3 +30,11 @@ If browsed from browser, a Devise auth cookie will be sent back.
 ```bash
 docker-compose up --build
 ```
+
+### Postgis
+
+```bash
+brew install postgis
+```
+
+run migrations (`CREATE EXTENSION IF NOT EXISTS postgis`) and make sure the user is a SUPERUSER (consider `ALTER ROLE stravaapi SUPERUSER;`)

@@ -10,10 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190908193651) do
+ActiveRecord::Schema.define(version: 20190921185641) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "postgis"
 
   create_table "activities", force: :cascade do |t|
     t.string   "external_id"

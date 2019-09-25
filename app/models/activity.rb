@@ -18,6 +18,8 @@ class Activity < ActiveRecord::Base
       start_latlng: activity.start_latlng,
       end_latlng: activity.end_latlng,
       commute: activity.commute
+      # TODO: needs to be converted to postgis linestring
+      # map: activity.map[:summary_polyline]
     )
   end
 

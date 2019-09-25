@@ -38,12 +38,25 @@ namespace :import do
 
       break if activities_response.blank?
 
-      activities = activities_response.map do |activity_response|
+      activities_response.each do |activity_response|
         strava_activity = Strava::Activity.new(activity_response)
-        Activity.from_strava_activity(strava_activity).to_h
+        activity = Activity.from_strava_activity(strava_activity)
+        activity.save!
+        # TODO: does this reload needed, or activity.save! will set the activity.id
+        activity.reload
+
+        encoded_polyline = strava_activity.map['summary_polyline']
+        next unless encoded_polyline
+
+        decoded_polyline = Polylines::Decoder.decode_polyline(encoded_polyline)
+        line_string_text = "LINESTRING(#{decoded_polyline.map { |p| "#{p.first} #{p.second}" }.join(',')})"
+        query = "UPDATE activities SET map = ST_GeomFromText('#{line_string_text}', 3785) WHERE id = #{activity.id}"
+
+        ActiveRecord::Base.connection.execute(query)
       end
 
-      Activity.create!(activities)
+      # TODO: figure out how to save many. not sure how to do it with map (linestring type)
+      # Activity.create!(activities)
     end
   end
 end

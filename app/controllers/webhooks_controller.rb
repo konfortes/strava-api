@@ -7,6 +7,10 @@ class WebhooksController < ActionController::API
       Strava::ActivityDescriber.new(strava_client, params[:object_id]).perform
     end
 
+    if delete_activity?
+      Activity.where(external_id: params[:object_id]).delete_all
+    end
+
     head :ok
   end
 
@@ -18,6 +22,10 @@ class WebhooksController < ActionController::API
 
   def new_activity?
     params[:aspect_type] == 'create' && params[:object_type] == 'activity'
+  end
+
+  def delete_activity?
+    params[:aspect_type] == 'delete' && params[:object_type] == 'activity'
   end
 
   # def authorize_request!

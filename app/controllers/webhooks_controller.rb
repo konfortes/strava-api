@@ -1,5 +1,6 @@
 class WebhooksController < ActionController::API
   # before_action :authorize_request!
+  rescue_from Strava::Api::V3::ClientError, with: :failed_event
 
   def hook
     if new_activity?
@@ -31,6 +32,10 @@ class WebhooksController < ActionController::API
   # def authorize_request!
   #   raise 'mismatch verification token' unless params[:verification_token] == Rails.application.secrets.strava_webhook_verification_code
   # end
+
+  def failed_event
+    FailedEvent.create!(params)
+  end
 
   def strava_client
     @strava_client ||= begin

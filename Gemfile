@@ -6,15 +6,16 @@ git_source(:github) do |repo_name|
 end
 
 gem 'active_model_serializers', '~>0.9.4'
+gem 'activerecord-postgis-adapter'
+gem 'devise'
+gem 'omniauth-oauth2'
+gem 'omniauth-strava'
 gem 'pg'
+gem 'polylines'
 gem 'puma', '~> 3.0'
 gem 'rails', '~> 5.0.4'
 gem 'redis'
 gem 'redis-rails'
-
-gem 'devise'
-gem 'omniauth-oauth2'
-gem 'omniauth-strava'
 # TODO: deprecated. change to strava-ruby-client
 gem 'strava-api-v3'
 

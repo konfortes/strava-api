@@ -34,7 +34,7 @@ class WebhooksController < ActionController::API
   # end
 
   def failed_event
-    FailedEvent.create!(params.slice(event_params))
+    FailedEvent.create!(event_params)
   end
 
   def event_params

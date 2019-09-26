@@ -2,24 +2,30 @@ namespace :import do
   desc 'Import Activities'
 
   task failed: :environment do
-    FailedEvent.each do |event|
+    FailedEvent.unprocessed.each do |event|
       activity_response = client.retrieve_activity(event.object_id)
       next unless activity_response
 
       strava_activity = Strava::Activity.new(activity_response)
       encoded_polyline = strava_activity.map[:summary_polyline]
       activity = Activity.from_strava_activity(strava_activity)
-      activity.save!
-      # TODO: needed?
-      activity.reload
+      ActiveRecord::Base.transaction do
+        activity.save!
+        # TODO: needed?
+        activity.reload
 
-      # TODO: DRY map save
-      decoded_polyline = Polylines::Decoder.decode_polyline(encoded_polyline)
+        # TODO: DRY map save
+        decoded_polyline = Polylines::Decoder.decode_polyline(encoded_polyline)
 
-      line_string_text = "LINESTRING(#{decoded_polyline.map { |p| "#{p.first} #{p.second}" }.join(',')})"
-      query = "UPDATE activities SET map = ST_GeomFromText('#{line_string_text}', 3785) WHERE id = #{activity.id}"
+        line_string_text = "LINESTRING(#{decoded_polyline.map { |p| "#{p.first} #{p.second}" }.join(',')})"
+        query = "UPDATE activities SET map = ST_GeomFromText('#{line_string_text}', 3785) WHERE id = #{activity.id}"
 
-      ActiveRecord::Base.connection.execute(query)
+        ActiveRecord::Base.connection.execute(query)
+
+        event.update!(processed: true)
+      end
+
+      
     end
   end
 

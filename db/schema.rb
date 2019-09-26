@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190925125758) do
+ActiveRecord::Schema.define(version: 20190926125743) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,8 +43,9 @@ ActiveRecord::Schema.define(version: 20190925125758) do
     t.string   "object_type"
     t.string   "object_id"
     t.string   "owner_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.boolean  "processed",   default: false
   end
 
   create_table "race_events", force: :cascade do |t|

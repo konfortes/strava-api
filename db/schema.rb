@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190926125743) do
+ActiveRecord::Schema.define(version: 20190925125758) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,21 +31,22 @@ ActiveRecord::Schema.define(version: 20190926125743) do
     t.integer  "kudos_count"
     t.jsonb    "start_latlng"
     t.jsonb    "end_latlng"
+    t.string   "encoded_path"
+    t.geometry "path",              limit: {:srid=>3785, :type=>"line_string"}
     t.boolean  "commute"
     t.datetime "created_at",                                                    null: false
     t.datetime "updated_at",                                                    null: false
-    t.geometry "map",               limit: {:srid=>3785, :type=>"line_string"}
     t.index ["external_id"], name: "index_activities_on_external_id", unique: true, using: :btree
   end
 
   create_table "failed_events", force: :cascade do |t|
+    t.boolean  "processed",   default: false
     t.string   "aspect_type"
     t.string   "object_type"
     t.string   "object_id"
     t.string   "owner_id"
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
-    t.boolean  "processed",   default: false
   end
 
   create_table "race_events", force: :cascade do |t|

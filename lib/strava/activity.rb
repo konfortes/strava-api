@@ -17,6 +17,8 @@ module Strava
 
     def self.within_date_range(client, options = {})
       activities = client.list_athlete_activities(options)
+      return [] unless activities
+
       activities.map { |activity| new(activity) }
     end
 

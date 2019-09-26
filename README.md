@@ -31,10 +31,12 @@ If browsed from browser, a Devise auth cookie will be sent back.
 docker-compose up --build
 ```
 
-### Postgis
+## Webhooks
 
-```bash
-brew install postgis
-```
+webhooks for activities are received by the webhooks_controller. failed event will be saved as FailedEvent and can be processed later by `bundle exec rake import:failed`
 
-run migrations (`CREATE EXTENSION IF NOT EXISTS postgis`) and make sure the user is a SUPERUSER (consider `ALTER ROLE stravaapi SUPERUSER;`)
+## Tasks
+
+* import:activities - will import activities (include map)
+* import:map - will import map for existing activities
+* import:failed (will import failed events)

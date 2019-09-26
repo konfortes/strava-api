@@ -1,6 +1,7 @@
 namespace :import do
   desc 'Import Activities'
 
+  # TODO: works only for create
   task failed: :environment do
     FailedEvent.unprocessed.each do |event|
       activity_response = client.retrieve_activity(event.object_id)

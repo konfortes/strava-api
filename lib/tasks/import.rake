@@ -1,11 +1,29 @@
 namespace :import do
   desc 'Import Activities'
 
-  task map: :environment do
-    user = User.last
-    auth_token = user.authorization_token
-    client = Strava::Client.new(access_token: auth_token)
+  task failed: :environment do
+    FailedEvent.each do |event|
+      activity_response = client.retrieve_activity(event.object_id)
+      next unless activity_response
 
+      strava_activity = Strava::Activity.new(activity_response)
+      encoded_polyline = strava_activity.map[:summary_polyline]
+      activity = Activity.from_strava_activity(strava_activity)
+      activity.save!
+      # TODO: needed?
+      activity.reload
+
+      # TODO: DRY map save
+      decoded_polyline = Polylines::Decoder.decode_polyline(encoded_polyline)
+
+      line_string_text = "LINESTRING(#{decoded_polyline.map { |p| "#{p.first} #{p.second}" }.join(',')})"
+      query = "UPDATE activities SET map = ST_GeomFromText('#{line_string_text}', 3785) WHERE id = #{activity.id}"
+
+      ActiveRecord::Base.connection.execute(query)
+    end
+  end
+
+  task map: :environment do
     Activity.find_each do |activity|
       strava_activity = client.retrieve_activity(activity.external_id)
       encoded_polyline = strava_activity.with_indifferent_access.dig(:map, :summary_polyline)
@@ -21,10 +39,6 @@ namespace :import do
   end
 
   task activities: :environment do
-    user = User.last
-    auth_token = user.authorization_token
-    client = Strava::Client.new(access_token: auth_token)
-
     page = 0
     loop do
       page += 1
@@ -59,4 +73,10 @@ namespace :import do
       # Activity.create!(activities)
     end
   end
+end
+
+def client
+  user = User.last
+  auth_token = user.authorization_token
+  Strava::Client.new(access_token: auth_token)
 end

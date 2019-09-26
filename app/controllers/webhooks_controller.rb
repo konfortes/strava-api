@@ -34,8 +34,11 @@ class WebhooksController < ActionController::API
   # end
 
   def failed_event
-    failed_event_fields = %i[aspect_type object_type object_id owner_id]
-    FailedEvent.create!(params.slice(*failed_event_fields))
+    FailedEvent.create!(params.slice(event_params))
+  end
+
+  def event_params
+    params.permit(:aspect_type, :object_type, :object_id, :owner_id)
   end
 
   def strava_client

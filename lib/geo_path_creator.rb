@@ -1,6 +1,6 @@
 class GeoPathCreator
   def initialize(activity_id)
-    @activity = Activity.find(activity_id)
+    @activity = Activity.where(external_id: activity_id).last
   end
 
   def perform

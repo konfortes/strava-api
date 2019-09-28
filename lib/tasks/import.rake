@@ -8,7 +8,8 @@ namespace :import do
         Strava::ActivityImporter.new(client, event.object_id).perform
         GeoPathCreator.new(event.object_id).perform
         Strava::LapsDescriptionDecorator.new(strava_client, event.object_id).perform
-        Strava::WeatherDecorator.new(strava_client, event.object_id).perform
+        # TODO: uncomment when historical weather available
+        # Strava::WeatherDecorator.new(strava_client, event.object_id).perform
 
         event.update!(processed: true)
       end
@@ -31,15 +32,18 @@ namespace :import do
       break if strava_activities.blank?
 
       strava_activities.each do |strava_activity|
+        next if Activity.where(external_id: strava_activity.id).exists?
+
         activity = Activity.from_strava_activity(strava_activity)
         activity.save!
-
-        GeoPathCreator.new(activity.id).perform
+        GeoPathCreator.new(activity.external_id).perform
+        Strava::LapsDescriptionDecorator.new(client, activity.external_id).perform
       end
     end
   end
 end
 
+# TODO: memoize in class member?
 def client
   user = User.last
   auth_token = user.authorization_token

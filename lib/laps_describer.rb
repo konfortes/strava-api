@@ -9,7 +9,8 @@ class LapsDescriber
   def describe
     return '' unless classic_pattern?
 
-    wu_cd_description.insert(1, main_laps_description).join("\n")
+    # wu_cd_description.insert(1, main_laps_description).join("\n")
+    main_laps_description
   end
 
   private

@@ -1,5 +1,5 @@
 module Strava
-  class ActivityDescriber
+  class LapsDescriptionDecorator
     def initialize(strava_client, activity_id)
       @strava_client = strava_client
       @activity_id = activity_id

@@ -7,7 +7,8 @@ namespace :import do
       ActiveRecord::Base.transaction do
         Strava::ActivityImporter.new(client, event.object_id).perform
         GeoPathCreator.new(event.object_id).perform
-        Strava::ActivityDescriber.new(strava_client, event.object_id).perform
+        Strava::LapsDescriptionDecorator.new(strava_client, event.object_id).perform
+        Strava::WeatherDecorator.new(strava_client, event.object_id).perform
 
         event.update!(processed: true)
       end

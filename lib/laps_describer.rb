@@ -2,7 +2,7 @@ class LapsDescriber
   attr_accessor :laps
 
   def initialize(activity)
-    @laps = activity.laps.map { |lap| Lap.new(lap) }
+    @laps = (activity.laps || []).map { |lap| Lap.new(lap) }
     sanitize!
   end
 

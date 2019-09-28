@@ -8,6 +8,7 @@ end
 gem 'active_model_serializers', '~>0.9.4'
 gem 'activerecord-postgis-adapter'
 gem 'devise'
+gem 'faraday'
 gem 'omniauth-oauth2'
 gem 'omniauth-strava'
 gem 'pg'

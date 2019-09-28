@@ -26,6 +26,8 @@ module Strava
     end
 
     def update_activity(id, params)
+      $redis.del("activity:#{id}")
+
       @client.update_an_activity(id, params)
     end
 

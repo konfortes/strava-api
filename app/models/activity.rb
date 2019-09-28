@@ -7,7 +7,7 @@ class Activity < ActiveRecord::Base
       athlete_id: activity.athlete['id'],
       activity_type: activity.type,
       name: activity.name,
-      # description: activity.description
+      description: activity.description,
       start_date: activity.start_date,
       distance: activity.distance,
       average_speed: activity.average_speed,

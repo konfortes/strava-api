@@ -1,7 +1,6 @@
 namespace :import do
-  desc 'Import Activities'
-
   # TODO: works only for create
+  desc 'Reprocess Failed Activities'
   task failed: :environment do
     FailedEvent.unprocessed.each do |event|
       ActiveRecord::Base.transaction do
@@ -16,6 +15,7 @@ namespace :import do
     end
   end
 
+  desc 'Import Activities'
   task activities: :environment do
     page = 0
     loop do
@@ -37,7 +37,6 @@ namespace :import do
         activity = Activity.from_strava_activity(strava_activity)
         activity.save!
         GeoPathCreator.new(activity.external_id).perform
-        Strava::LapsDescriptionDecorator.new(client, activity.external_id).perform
       end
     end
   end

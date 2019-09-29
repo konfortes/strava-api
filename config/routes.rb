@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root 'athletes#index'
+  root 'activities#index'
   devise_for :users, controllers: { omniauth_callbacks: 'callbacks' }
 
   resources :activities, only: %I[index show] do

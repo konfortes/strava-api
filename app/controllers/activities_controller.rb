@@ -2,7 +2,7 @@ class ActivitiesController < ApplicationController
   before_action :authenticate_user!, :ensure_authorization_token!
 
   def index
-    range = params.permit(:before, :after).reverse_merge(after: 7.days.ago.to_i, before: 1.days.from_now.to_i)
+    range = params.permit(:before, :after).reverse_merge(after: 7.days.ago.to_i, before: 1.minute.from_now.to_i)
     activities = Strava::Activity.within_date_range(strava_client, range)
 
     render json: ActiveModel::ArraySerializer.new(activities, each_serializer: BaseActivitySerializer)

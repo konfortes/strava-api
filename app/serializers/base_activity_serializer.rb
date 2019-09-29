@@ -21,7 +21,7 @@ class BaseActivitySerializer < ActiveModel::Serializer
   def average_pace
     return if object.average_speed.blank? || object.average_speed.zero?
 
-    if object.type == Activity::Type::SWIM
+    if object.type == Strava::Activity::Type::SWIM
       UnitsConverter.meters_per_second_to_pace_per_100m(object.average_speed)
     else
       UnitsConverter.meters_per_second_to_pace_per_km(object.average_speed)

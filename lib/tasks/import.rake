@@ -17,11 +17,12 @@ namespace :import do
 
   desc 'Import Activities'
   task activities: :environment do
+    strava_activities = []
     page = 0
     loop do
       page += 1
 
-      strava_activities = Strava::Activity.within_date_range(
+      response = Strava::Activity.within_date_range(
         client,
         after: 10.years.ago.to_i,
         before: 1.second.from_now,
@@ -29,15 +30,17 @@ namespace :import do
         page: page
       )
 
-      break if strava_activities.blank?
+      break if response.blank?
 
-      strava_activities.each do |strava_activity|
-        next if Activity.where(external_id: strava_activity.id).exists?
+      strava_activities += response
+    end
 
-        activity = Activity.from_strava_activity(strava_activity)
-        activity.save!
-        GeoPathCreator.new(activity.external_id).perform
-      end
+    strava_activities.reverse.each do |strava_activity|
+      next if Activity.where(external_id: strava_activity.id).exists?
+
+      activity = Activity.from_strava_activity(strava_activity)
+      activity.save!
+      GeoPathCreator.new(activity.external_id).perform
     end
   end
 end

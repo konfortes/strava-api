@@ -6,7 +6,7 @@ namespace :import do
       ActiveRecord::Base.transaction do
         Strava::ActivityImporter.new(client, event.object_id).perform
         GeoPathCreator.new(event.object_id).perform
-        Strava::LapsDescriptionDecorator.new(strava_client, event.object_id).perform
+        Strava::LapsDescriptionDecorator.new(client, event.object_id).perform
         # TODO: uncomment when historical weather available
         # Strava::WeatherDecorator.new(strava_client, event.object_id).perform
 

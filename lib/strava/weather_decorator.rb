@@ -36,7 +36,6 @@ module Strava
     end
 
     def wind_direction(direction)
-      binding.pry
       case direction
       when 'NW', 'WNW', 'NNW'
         [8600].pack('U*')

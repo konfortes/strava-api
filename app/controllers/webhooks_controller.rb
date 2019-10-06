@@ -45,8 +45,8 @@ class WebhooksController < ActionController::API
 
   def strava_client
     @strava_client ||= begin
-      access_token = User.where(uid: params[:owner_id]).pluck(:authorization_token)
-      return unless access_token
+      user = User.where(uid: params[:owner_id]).first
+      access_token = user.fresh_authorization_token
 
       Strava::Client.new(access_token: access_token)
     end

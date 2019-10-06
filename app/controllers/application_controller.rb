@@ -10,6 +10,6 @@ class ApplicationController < ActionController::API
   end
 
   def strava_client
-    @strava_client ||= Strava::Client.new(access_token: current_user.authorization_token)
+    @strava_client ||= Strava::Client.new(access_token: current_user.fresh_authorization_token)
   end
 end

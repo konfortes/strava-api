@@ -29,31 +29,34 @@ module Strava
     end
 
     def verbalized_weather(weather)
-      %Q("#{weather[:temperature]}#{[127_777].pack('U*')}"
-"#{wind_direction(weather[:wind_dir])}#{weather[:wind_speed]}km/h#{[127_788].pack('U*')}"
-"#{weather[:humidity]}%#{[128_167].pack('U*')}"
-"Felt like #{weather[:feelslike]}#{[127_777].pack('U*')}")
+      %Q(#{weather[:temperature]}#{[127_777].pack('U*')}
+#{wind_direction(weather[:wind_dir])}#{weather[:wind_speed]}km/h#{[127_788].pack('U*')}
+#{weather[:humidity]}%#{[128_167].pack('U*')}
+Felt like #{weather[:feelslike]}#{[127_777].pack('U*')})
     end
 
     def wind_direction(direction)
-      case direction
-      when 'NW', 'WNW', 'NNW'
-        [8600].pack('U*')
-      when 'N'
-        [11_015].pack('U*')
-      when 'NE', 'ENE', 'NNE'
-        [8601].pack('U*')
-      when 'E'
-        [11_013].pack('U*')
-      when 'SE', 'ESE', 'SSE'
-        [8598].pack('U*')
-      when 'S'
-        [11_014].pack('U*')
-      when 'SW', 'WSW', 'SSW'
-        [8599].pack('U*')
-      when 'W'
-        [8600].pack('U*')
-      end
+      code =
+        case direction
+        when 'WNW', 'NW', 'NNW'
+          [8600]
+        when 'N'
+          [11_015]
+        when 'NNE', 'NE', 'ENE'
+          [8601]
+        when 'E'
+          [11_013]
+        when 'ESE', 'SE', 'SSE'
+          [8598]
+        when 'S'
+          [11_014]
+        when 'SSW', 'SW', 'WSW'
+          [8599]
+        when 'W'
+          [8600]
+        end
+
+      code.pack('U*')
     end
   end
 end

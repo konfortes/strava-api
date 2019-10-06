@@ -29,7 +29,6 @@ namespace :import do
         per_page: 50,
         page: page
       )
-
       break if response.blank?
 
       strava_activities += response
@@ -48,6 +47,6 @@ end
 # TODO: memoize in class member?
 def client
   user = User.last
-  auth_token = user.authorization_token
+  auth_token = user.fresh_authorization_token
   Strava::Client.new(access_token: auth_token)
 end

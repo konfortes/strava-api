@@ -11,14 +11,11 @@ module Strava
 
       return unless outdoor_activity?
 
-      # TODO: uncomment
-      # description = @strava_activity.description || ''
-      # description += "\n\n" if description.present?
+      description = @strava_activity.description || ''
+      description += "\n\n" if description.present?
 
       weather = WeatherClient.current(@strava_activity.start_latlng)
-      # TODO: uncomment
-      # description += verbalized_weather(weather)
-      description = verbalized_weather(weather)
+      description += verbalized_weather(weather)
       Strava::Activity.update(@strava_client, @activity_id, description: description)
     end
 

@@ -11,9 +11,14 @@ module Strava
 
       return unless outdoor_activity?
 
-      description = @strava_activity.description
-      description += "\n"
-      description += verbalized_weather
+      # TODO: uncomment
+      # description = @strava_activity.description || ''
+      # description += "\n\n" if description.present?
+
+      weather = WeatherClient.current(@strava_activity.start_latlng)
+      # TODO: uncomment
+      # description += verbalized_weather(weather)
+      description = verbalized_weather(weather)
       Strava::Activity.update(@strava_client, @activity_id, description: description)
     end
 
@@ -23,28 +28,33 @@ module Strava
       @strava_activity.start_latlng.present?
     end
 
-    # TODO: historical data
-    def verbalized_weather
-      weather = weather_data
-
-      "It was #{weather[:temperature]} degrees withֿֿֿֿ\
-      #{weather[:wind_dir]} #{weather[:wind_speed]}km/h wind and\
-      #{weather[:humidity]}% humidity. It felt like #{weather[:feelslike]} degrees"
+    def verbalized_weather(weather)
+      %Q("#{weather[:temperature]}#{[127_777].pack('U*')}"
+"#{wind_direction(weather[:wind_dir])}#{weather[:wind_speed]}km/h#{[127_788].pack('U*')}"
+"#{weather[:humidity]}%#{[128_167].pack('U*')}"
+"Felt like #{weather[:feelslike]}#{[127_777].pack('U*')}")
     end
 
-    def weather_data
-      api_key = Rails.application.secrets.weather_api_key
-      query = @strava_activity.start_latlng.join(',')
-      response = Faraday.get "http://api.weatherstack.com/current?access_key=#{api_key}&query=#{query}"
-
-      handle_failed_request(response) && return unless response.status == 200
-
-      JSON(response.body).with_indifferent_access[:current]
-    end
-
-    def handle_failed_request(response)
-      # TODO: fallback to other provider
-      Rails.logger.error("failed weather request for activity #{@activity_id}. error: #{response.body}")
+    def wind_direction(direction)
+      binding.pry
+      case direction
+      when 'NW', 'WNW', 'NNW'
+        [8600].pack('U*')
+      when 'N'
+        [11_015].pack('U*')
+      when 'NE', 'ENE', 'NNE'
+        [8601].pack('U*')
+      when 'E'
+        [11_013].pack('U*')
+      when 'SE', 'ESE', 'SSE'
+        [8598].pack('U*')
+      when 'S'
+        [11_014].pack('U*')
+      when 'SW', 'WSW', 'SSW'
+        [8599].pack('U*')
+      when 'W'
+        [8600].pack('U*')
+      end
     end
   end
 end

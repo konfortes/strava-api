@@ -16,7 +16,6 @@ class CreateActivities < ActiveRecord::Migration[5.0]
       t.jsonb       :start_latlng
       t.jsonb       :end_latlng
       t.string      :encoded_path
-      t.line_string :path, srid: 3785
       t.boolean     :commute
 
       t.timestamps null: false

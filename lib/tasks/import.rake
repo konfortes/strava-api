@@ -39,7 +39,7 @@ namespace :import do
 
       activity = Activity.from_strava_activity(strava_activity)
       activity.save!
-      GeoPathCreator.new(activity.external_id).perform
+      # GeoPathCreator.new(activity.external_id).perform
     end
   end
 end

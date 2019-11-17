@@ -5,7 +5,7 @@ class WebhooksController < ActionController::API
   def hook
     if new_activity?
       Strava::ActivityImporter.new(strava_client, params[:object_id]).perform
-      GeoPathCreator.new(params[:object_id]).perform
+      # GeoPathCreator.new(params[:object_id]).perform
       Strava::LapsDescriptionDecorator.new(strava_client, params[:object_id]).perform
       Strava::WeatherDecorator.new(strava_client, params[:object_id]).perform
     end

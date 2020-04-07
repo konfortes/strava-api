@@ -9,7 +9,7 @@ class WebhooksController < ActionController::API
       description = ActivityDescriber.new(strava_activity, WeatherClient).describe
       strava_activity.description = description
       ActivityImporter.new(strava_activity).perform
-      Strava::Activity.update(@strava_client, @activity_id, description: description)
+      Strava::Activity.update(strava_client, params[:object_id], description: description)
     end
 
     if delete_activity?

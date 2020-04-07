@@ -14,7 +14,7 @@ class LapsDescriber
   private
 
   def laps
-    @laps ||= (@activity.laps || []).map { |lap| Lap.new(lap) }.reject! { |lap| lap.moving_time < 20 }
+    @laps ||= ((@activity.laps || []).map { |lap| Lap.new(lap) }.reject! { |lap| lap.moving_time < 20 } || [])
   end
 
   def classic_pattern?

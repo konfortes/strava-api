@@ -5,8 +5,8 @@ class ActivityDescriber
   end
 
   def describe
-    laps_description = LapsDescriber.new(strava_activity).describe
-    weather_description = WeatherDescriber.new(strava_activity, WeatherClient).describe
+    laps_description = LapsDescriber.new(@activity).describe
+    weather_description = WeatherDescriber.new(@activity, WeatherClient).describe
 
     description = laps_description || ''
     description += "\n\n" if description.present?

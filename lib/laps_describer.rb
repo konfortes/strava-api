@@ -1,13 +1,11 @@
 class LapsDescriber
-  attr_accessor :laps
-
   def initialize(activity)
-    @laps = (activity.laps || []).map { |lap| Lap.new(lap) }
-    sanitize!
+    @activity = activity
   end
 
   def describe
-    return '' unless classic_pattern?
+    return unless @activity.type == Strava::Activity::Type::RUN
+    return unless classic_pattern?
 
     # wu_cd_description.insert(1, main_laps_description).join("\n")
     main_laps_description
@@ -15,10 +13,14 @@ class LapsDescriber
 
   private
 
+  def laps
+    @laps ||= (@activity.laps || []).map { |lap| Lap.new(lap) }.reject! { |lap| lap.moving_time < 20 }
+  end
+
   def classic_pattern?
     laps.count >= 6 && interval_laps.count == recovery_laps.count &&
-      interval_laps.map(&:average_speed).min > recovery_laps.map(&:average_speed).max &&
-      interval_laps.count >= 3
+      interval_laps.count >= 3 &&
+      interval_laps.map(&:average_speed).min > recovery_laps.map(&:average_speed).max
   end
 
   def wu_cd_description
@@ -52,7 +54,12 @@ class LapsDescriber
 
   def laps_unit(laps)
     if distance_based?(laps)
-      "#{UnitsConverter.meters_to_kms(laps.second.distance)}km"
+      distance = laps.second.distance
+      if distance >= 1000
+        "#{UnitsConverter.meters_to_kms(distance)}km"
+      else
+        "#{distance}m"
+      end
     else # time based
       UnitsConverter.seconds_to_humanized_time(laps.second.moving_time)
     end
@@ -71,9 +78,5 @@ class LapsDescriber
 
   def cd_lap
     laps.last
-  end
-
-  def sanitize!
-    laps.reject! { |lap| lap.moving_time < 20 }
   end
 end

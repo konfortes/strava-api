@@ -4,10 +4,12 @@ class WebhooksController < ActionController::API
 
   def hook
     if new_activity?
-      Strava::ActivityImporter.new(strava_client, params[:object_id]).perform
-      # GeoPathCreator.new(params[:object_id]).perform
-      Strava::LapsDescriptionDecorator.new(strava_client, params[:object_id]).perform
-      Strava::WeatherDecorator.new(strava_client, params[:object_id]).perform
+      strava_activity = Strava::Activity.find(strava_client, params[:object_id])
+
+      description = ActivityDescriber.new(strava_activity, WeatherClient).describe
+      strava_activity.description = description
+      ActivityImporter.new(strava_activity).perform
+      Strava::Activity.update(@strava_client, @activity_id, description: description)
     end
 
     if delete_activity?

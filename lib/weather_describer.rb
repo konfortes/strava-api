@@ -8,9 +8,7 @@ class WeatherDescriber
     return unless outdoor_activity?
 
     weather = @weather_client.current(@strava_activity.start_latlng)
-    description += verbalized_weather(weather)
-
-    description
+    verbalized_weather(weather)
   end
 
   private
